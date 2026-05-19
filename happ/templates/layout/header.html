@@ -1,0 +1,27 @@
+<header>
+  <a href="/" class="logo" style="text-decoration: none">Phòng Khám <span>OU</span></a>
+
+  <nav>
+    <a href="/dashboard">Đặt lịch</a>
+    <a href="#">Bác sĩ</a>
+    <a href="#">Hỗ trợ</a>
+
+    {% if current_user.is_authenticated %}
+      <div class="nav-user">
+        <div class="user-btn">
+          <img src="{{ current_user.avatar }}" alt="Avatar" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+          <span style="font-size: 14px; font-weight: 600; color: white">{{ current_user.name }}</span>
+          <i class="bi bi-chevron-down" style="font-size: 11px;"></i>
+        </div>
+        <div class="dropdown-content">
+          <a href="/dashboard">Đặt lịch</a>
+          <a href="/dashboard#lich-sap-toi">Hủy lịch</a>
+          <hr style="margin: 0; border-top: 1px solid var(--border);">
+          <a href="/logout" style="color: var(--danger);">Đăng xuất</a>
+        </div>
+      </div>
+    {% else %}
+      <a href="/login" class="btn-nav" style="text-decoration: none; text-align: center;"> Đăng nhập </a>
+    {% endif %}
+  </nav>
+</header>

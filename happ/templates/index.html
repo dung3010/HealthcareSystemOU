@@ -1,0 +1,62 @@
+{% extends 'layout/base.html' %}
+{% block title %}Trang chủ - Phòng Khám OU{% endblock %}
+
+{% block content %}
+<!-- Phần Banner / Lời chào -->
+<div class="hero">
+    <!-- Khối kính mờ bọc nội dung -->
+    <div class="hero-content">
+        <!-- Đã bỏ text-shadow để chữ nhìn "sạch" và phẳng hơn trên nền kính -->
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 700; color: #2D5F4F; margin-bottom: 1rem;">
+            Chào mừng đến với Bệnh Viện Đa Khoa OU
+        </h1>
+
+        <p style="color: #1C1A17; font-size: 15px; font-weight: 600; margin: 0 auto 2rem auto; line-height: 1.6;">
+            Phòng khám đa khoa quy tụ đội ngũ chuyên gia, bác sĩ, dược sĩ và điều dưỡng có trình độ chuyên môn cao, tay nghề giỏi, tận tâm và chuyên nghiệp.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="/dashboard" class="btn btn-primary" style="text-decoration: none; font-size: 16px; font-weight: bold; padding: 14px 30px;">Đặt hẹn khám nhanh</a>
+            <a href="#about" class="btn btn-secondary" style="text-decoration: none; font-size: 16px; font-weight: bold; padding: 14px 30px; background-color: rgba(255,255,255,0.95);">Tìm hiểu thêm</a>
+        </div>
+    </div>
+</div>
+
+<!-- Phần 3 Khối Điểm Nhấn -->
+<div class="wrapper" style="padding-top: 3rem; padding-bottom: 2rem; grid-template-columns: 1fr;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+
+        <div class="card" style="text-align: center; padding: 2rem;">
+            <div style="font-size: 24px; font-weight: 600; color: var(--accent-mid); margin-bottom: 10px;">01</div>
+            <h3 style="font-size: 16px; margin-bottom: 10px;">Tư vấn khám miễn phí</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Gọi ngay hotline để được tư vấn các vấn đề sức khỏe hoàn toàn miễn phí 24/7.</p>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 2rem;">
+            <div style="font-size: 24px; font-weight: 600; color: var(--accent-mid); margin-bottom: 10px;">02</div>
+            <h3 style="font-size: 16px; margin-bottom: 10px;">Đặt hẹn khám nhanh</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Không cần chờ đợi, chủ động chọn khung giờ phù hợp ngay trên hệ thống trực tuyến.</p>
+        </div>
+
+        <div class="card" style="text-align: center; padding: 2rem;">
+            <div style="font-size: 24px; font-weight: 600; color: var(--accent-mid); margin-bottom: 10px;">03</div>
+            <h3 style="font-size: 16px; margin-bottom: 10px;">Chọn bác sĩ chuyên khoa</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Khám đúng chuyên khoa, chọn ngay chuyên gia và bác sĩ mà bạn tin tưởng nhất.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- Phần Về chúng tôi (About Us) -->
+<div id="about" class="wrapper" style="padding-top: 0; padding-bottom: 4rem; grid-template-columns: 1fr;">
+    <div class="card" style="padding: 3rem 2rem; text-align: center; border: 1px solid var(--border); background-color: var(--surface);">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; color: #2D5F4F; margin-bottom: 1.5rem;">Về Phòng Khám OU</h2>
+        <p style="color: var(--text-muted); font-size: 15px; max-width: 800px; margin: 0 auto 1rem auto; line-height: 1.8;">
+            Phòng Khám Đa Khoa OU tự hào là cơ sở y tế uy tín, mang đến dịch vụ chăm sóc sức khỏe toàn diện và chất lượng cao. Với sứ mệnh "Tận tâm vì sức khỏe cộng đồng", chúng tôi không ngừng nỗ lực nâng cao trình độ chuyên môn, cập nhật trang thiết bị hiện đại để phục vụ bệnh nhân tốt nhất.
+        </p>
+        <p style="color: var(--text-muted); font-size: 15px; max-width: 800px; margin: 0 auto; line-height: 1.8;">
+            Chúng tôi cam kết xây dựng một môi trường y tế thân thiện, nơi mọi bệnh nhân đều được lắng nghe, thấu hiểu và chăm sóc nhiệt tình như chính người thân trong gia đình.
+        </p>
+    </div>
+</div>
+{% endblock %}
