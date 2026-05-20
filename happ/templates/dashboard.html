@@ -6,10 +6,10 @@
 
 <!-- Flash messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div style="max-width: 900px; margin: 1rem auto 0; padding: 0 1rem;">
-      {% for category, message in messages %}
-        <div style="
+{% if messages %}
+<div style="max-width: 900px; margin: 1rem auto 0; padding: 0 1rem;">
+    {% for category, message in messages %}
+    <div style="
           padding: .75rem 1rem;
           margin-bottom: .5rem;
           border-radius: 8px;
@@ -23,44 +23,49 @@
             background: #fffbe6; color: #7c5e10; border: 1px solid #ffe58f;
           {% endif %}
         ">
-          {% if category == 'danger' %}⚠️{% elif category == 'success' %}✅{% else %}ℹ️{% endif %}
-          {{ message }}
-        </div>
-      {% endfor %}
+        {% if category == 'danger' %}⚠️{% elif category == 'success' %}✅{% else %}ℹ️{% endif %}
+        {{ message }}
     </div>
-  {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
 {% endwith %}
 
 <div class="wrapper">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-    <!-- User info -->
-    <div class="card">
-      <div class="user-row">
-        <div class="avatar">NV</div>
-        <div>
-          <div class="user-name">{{ current_user.name }}</div>
-          <div class="user-role">{% if current_user.user_role.name == 'PATIENT' %}Bệnh nhân{% else %}Quản trị viên{% endif %}</div>
-        </div>
-      </div>
-      <hr class="divider">
-      <div class="info-row">
-        <span class="label">Mã bệnh nhân</span>
-        <span class="val">BN-00412</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Lịch hôm nay</span>
-        <span class="val">{{ today_count }} / 2 lịch</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Trạng thái</span>
-        <span class="badge badge-ok">Hoạt động</span>
-      </div>
-      <div class="info-row">
-        <span class="label">Hủy tuần này</span>
-        <span class="val" style="color: {% if current_user.cancel_count_week >= 2 %}var(--danger){% else %}inherit{% endif %};">
+        <!-- User info -->
+        <div class="card">
+            <div class="user-row">
+                <div class="avatar">
+                    <img src="{{ current_user.avatar }}" alt="User Avatar" class="avatar-img">
+                </div>
+                <div>
+                    <div class="user-name">{{ current_user.name }}</div>
+                    <div class="user-role">{% if current_user.user_role.name == 'PATIENT' %}Bệnh nhân{% else %}Quản trị
+                        viên{% endif %}
+                    </div>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="info-row">
+                <span class="label">Mã bệnh nhân</span>
+                <span class="val">{{ current_user.id }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Lịch hôm nay</span>
+                <span class="val">{{ today_count }} / 2 lịch</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Trạng thái</span>
+                <span class="badge badge-ok">Hoạt động</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Hủy tuần này</span>
+                <span class="val"
+                      style="color: {% if current_user.cancel_count_week >= 2 %}var(--danger){% else %}inherit{% endif %};">
           {{ current_user.cancel_count_week }} / 3
           {% if current_user.cancel_count_week >= 3 %}
             <span style="color:var(--danger);font-size:11px;"> (Đã bị khóa)</span>
@@ -68,211 +73,162 @@
             <span style="font-size:11px;">(Còn {{ 3 - current_user.cancel_count_week }} lần)</span>
           {% endif %}
         </span>
-      </div>
-    </div>
-
-    <!-- Menu -->
-    <div class="card" style="padding: .8rem;">
-      <div class="card-title" style="padding: 0 .4rem;">Chức năng</div>
-      <a class="menu-item active" href="#">
-        <div class="menu-dot"></div> Đặt lịch khám
-      </a>
-      <a class="menu-item" href="#">
-        <div class="menu-dot"></div> Lịch của tôi
-      </a>
-      <a class="menu-item" href="#">
-        <div class="menu-dot"></div> Hủy / Đổi lịch
-      </a>
-      <a class="menu-item" href="#">
-        <div class="menu-dot"></div> Hồ sơ bệnh nhân
-      </a>
-    </div>
-
-    <!-- Notice -->
-    <div class="notice notice-warn">
-      <div>
-        <strong>Lưu ý:</strong> Lịch chỉ được hủy trước 1 giờ. Hủy quá 3 lần/tuần sẽ bị tạm khóa 24 giờ.
-      </div>
-    </div>
-
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-
-    <!-- Booking form (có kết nối backend) -->
-    <div class="card">
-      <div class="tabs">
-        <div class="tab active">Đặt lịch mới</div>
-        <a href="#lich-sap-toi" class="tab" style="text-decoration: none; color: inherit;">Lịch của tôi</a>
-        <div class="tab">Lịch sử khám</div>
-      </div>
-
-      <form method="POST" action="{{ url_for('book_process') }}">
-        <div class="form-grid">
-
-          <div class="form-group">
-            <label class="required">Bác sĩ</label>
-            <select name="doctor_id" required>
-              <option value="">-- Chọn bác sĩ --</option>
-              {% for d in doctors %}
-                <option value="{{ d.id }}">{{ d.name }} - {{ d.specialty }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="required">Ngày khám</label>
-            <input type="date" name="date" value="{{ today }}" min="{{ today }}" max="{{ max_date }}" required>
-          </div>
-
-          <!-- Time slots full width -->
-          <div class="form-group full">
-    <label class="required">Khung giờ (08:00 – 17:00)</label>
-    <div class="slots-grid" id="slots-grid">
-        <p style="font-size: 12px; color: var(--text-hint);">Vui lòng chọn bác sĩ và ngày để xem giờ trống...</p>
-    </div>
-    <input type="hidden" name="time" id="selected-time" required>
-</div>
-
-          <div class="form-group full">
-            <label>Ghi chú / Triệu chứng</label>
-            <textarea name="note" placeholder="Mô tả ngắn triệu chứng hoặc lý do đặt lịch..."></textarea>
-          </div>
-
+            </div>
         </div>
 
-        <div class="form-actions">
-          <button type="reset" class="btn btn-secondary">Đặt lại</button>
-          <button type="submit" class="btn btn-primary">Xác nhận đặt lịch</button>
+        <!-- Menu -->
+        <div class="card" style="padding: .8rem;">
+            <div class="card-title" style="padding: 0 .4rem;">Chức năng</div>
+            <a class="menu-item active" href="#">
+                <div class="menu-dot"></div>
+                Đặt lịch khám
+            </a>
+            <a class="menu-item" href="#">
+                <div class="menu-dot"></div>
+                Lịch của tôi
+            </a>
+            <a class="menu-item" href="#">
+                <div class="menu-dot"></div>
+                Hủy / Đổi lịch
+            </a>
+            <a class="menu-item" href="#">
+                <div class="menu-dot"></div>
+                Hồ sơ bệnh nhân
+            </a>
         </div>
-      </form>
-    </div>
 
-    <!-- Appointments table -->
-    <div class="card" id="lich-sap-toi">
-      <div class="table-header">
-        <div>
-          <div class="card-title" style="margin-bottom:2px;">Lịch sắp tới</div>
+        <!-- Notice -->
+        <div class="notice notice-warn">
+            <div>
+                <strong>Lưu ý:</strong> Lịch chỉ được hủy trước 1 giờ. Hủy quá 3 lần/tuần sẽ bị tạm khóa 24 giờ.
+            </div>
         </div>
-        <div class="search-bar">
-          <select class="filter-select">
-            <option>Tất cả trạng thái</option>
-            <option>Chờ xác nhận</option>
-            <option>Đã xác nhận</option>
-            <option>Đã hoàn thành</option>
-            <option>Đã hủy</option>
-          </select>
-        </div>
-      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Ngày giờ</th>
-            <th>Bác sĩ</th>
-            <th>Chuyên khoa</th>
-            <th>Loại</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if my_appointments %}
-            {% for appt in my_appointments %}
-            <tr>
-              <td>
-                <div style="font-weight:500">{{ appt.slot_time.strftime('%H:%M') }}</div>
-                <div style="font-size:12px;color:var(--text-muted)">{{ appt.app_date.strftime('%d/%m/%Y') }}</div>
-              </td>
-              <td>{{ appt.doctor.name }}</td>
-              <td>{{ appt.doctor.specialty }}</td>
-              <td>Khám bệnh</td>
-              <td>
-                {% if appt.status.name == 'CONFIRMED' %}
-                  <span class="status-pill status-confirmed">Đã xác nhận</span>
-                {% elif appt.status.name == 'COMPLETED' %}
-                  <span class="status-pill status-completed">Đã khám</span>
-                {% elif appt.status.name == 'CANCELLED' %}
-                  <span class="status-pill status-cancelled">Đã hủy</span>
-                {% endif %}
-              </td>
-              <td>
-                <div style="display:flex;gap:6px">
-                  <button class="action-btn">Chi tiết</button>
-                  {% if appt.status.name == 'CONFIRMED' %}
-                  <form method="POST" action="{{ url_for('cancel_appointment', appt_id=appt.id) }}" style="display:inline">
-                    <button type="submit" class="action-btn cancel" onclick="return confirm('Bạn có chắc muốn hủy?')">Hủy</button>
-                  </form>
-                  {% endif %}
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- Booking form (có kết nối backend) -->
+        <div class="card">
+            <div class="tabs">
+                <div class="tab active">Đặt lịch mới</div>
+                <a href="#lich-sap-toi" class="tab" style="text-decoration: none; color: inherit;">Lịch của tôi</a>
+                <div class="tab">Lịch sử khám</div>
+            </div>
+
+            <form method="POST" action="{{ url_for('dashboard') }}">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label class="required">Bác sĩ</label>
+                        <select name="doctor_id" required>
+                            <option value="">-- Chọn bác sĩ --</option>
+                            {% for d in doctors %}
+                            <option value="{{ d.id }}">{{ d.name }} - {{ d.specialty }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Ngày khám</label>
+                        <input type="date" name="date" value="{{ today }}" min="{{ today }}" max="{{ max_date }}"
+                               required>
+                    </div>
+
+                    <!-- Time slots full width -->
+                    <div class="form-group full">
+                        <label class="required">Khung giờ (08:00 – 17:00)</label>
+                        <div class="slots-grid" id="slots-grid">
+                            <p style="font-size: 12px; color: var(--text-hint);">Vui lòng chọn bác sĩ và ngày để xem giờ
+                                trống...</p>
+                        </div>
+                        <input type="hidden" name="time" id="selected-time" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Ghi chú / Triệu chứng</label>
+                        <textarea name="note" placeholder="Mô tả ngắn triệu chứng hoặc lý do đặt lịch..."></textarea>
+                    </div>
+
                 </div>
-              </td>
-            </tr>
-            {% endfor %}
-          {% else %}
-            <tr>
-              <td colspan="6" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
-                <i class="bi bi-calendar-x" style="font-size: 2rem; color: var(--border-strong); display: block; margin-bottom: 10px;"></i>
-                Chưa có lịch nào được đặt.
-              </td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
-    </div>
 
-    <!-- Doctors -->
-    <div class="card">
-      <div class="card-title">Bác sĩ hôm nay</div>
-      <div class="doctor-grid">
-        <div class="doctor-item">
-          <div class="doc-avatar">TK</div>
-          <div>
-            <div class="doc-name">BS. Trần Minh Khoa</div>
-            <div class="doc-spec">Nội tổng quát</div>
-            <div class="doc-slots">Còn 8 slot</div>
-          </div>
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-secondary">Đặt lại</button>
+                    <button type="submit" class="btn btn-primary">Xác nhận đặt lịch</button>
+                </div>
+            </form>
         </div>
-        <div class="doctor-item">
-          <div class="doc-avatar">LH</div>
-          <div>
-            <div class="doc-name">BS. Lê Thị Hương</div>
-            <div class="doc-spec">Da liễu</div>
-            <div class="doc-slots">Còn 3 slot</div>
-          </div>
-        </div>
-        <div class="doctor-item">
-          <div class="doc-avatar">NT</div>
-          <div>
-            <div class="doc-name">BS. Nguyễn Đức Thịnh</div>
-            <div class="doc-spec">Tim mạch</div>
-            <div class="doc-slots full">Hết slot (20/20)</div>
-          </div>
-        </div>
-        <div class="doctor-item unavailable">
-          <div class="doc-avatar" style="background:var(--surface-alt);color:var(--text-hint)">PT</div>
-          <div>
-            <div class="doc-name">BS. Phạm Thu Trang</div>
-            <div class="doc-spec">Thần kinh</div>
-            <div class="doc-slots full">Đang nghỉ phép</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  </main>
+        <!-- Appointments table -->
+        <div class="card" id="lich-sap-toi">
+            <div class="table-header">
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">Lịch sắp tới</div>
+                </div>
+
+            </div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Ngày giờ</th>
+                    <th>Bác sĩ</th>
+                    <th>Chuyên khoa</th>
+                    <th>Loại</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if my_appointments %}
+                {% for appt in my_appointments %}
+                <tr>
+                    <td>
+                        <div style="font-weight:500">{{ appt.slot_time.strftime('%H:%M') }}</div>
+                        <div style="font-size:12px;color:var(--text-muted)">{{ appt.app_date.strftime('%d/%m/%Y') }}
+                        </div>
+                    </td>
+                    <td>{{ appt.doctor.name }}</td>
+                    <td>{{ appt.doctor.specialty }}</td>
+                    <td>Khám bệnh</td>
+                    <td>
+                        {% if appt.status.name == 'CONFIRMED' %}
+                        <span class="status-pill status-confirmed">Đã xác nhận</span>
+                        {% elif appt.status.name == 'COMPLETED' %}
+                        <span class="status-pill status-completed">Đã khám</span>
+                        {% elif appt.status.name == 'CANCELLED' %}
+                        <span class="status-pill status-cancelled">Đã hủy</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div style="display:flex;gap:6px">
+                            <button class="action-btn">Chi tiết</button>
+                            {% if appt.status.name == 'CONFIRMED' %}
+                            <button type="button" class="action-btn cancel" onclick="confirmCancel('{{ appt.id }}')">
+                                Hủy
+                            </button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+                        <i class="bi bi-calendar-x"
+                           style="font-size: 2rem; color: var(--border-strong); display: block; margin-bottom: 10px;"></i>
+                        Chưa có lịch nào được đặt.
+                    </td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+
+    </main>
 </div>
 
-<script>
-// Slot grid: click để chọn giờ và cập nhật hidden input
-document.querySelectorAll('#slots-grid .slot:not(.booked)').forEach(function(slot) {
-  slot.addEventListener('click', function() {
-    document.querySelectorAll('#slots-grid .slot').forEach(s => s.classList.remove('selected'));
-    this.classList.add('selected');
-    // Chuyển "10:00" → "10:00" cho input[type=time]
-    document.getElementById('selected-time').value = this.textContent.trim();
-  });
-});
-</script>
-
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

@@ -15,9 +15,9 @@ db = SQLAlchemy(app=app)
 login = LoginManager(app=app)
 login.login_view = 'login_view'
 
-# 2. Tùy chỉnh thông báo sẽ hiển thị khi bị chặn
+
 login.login_message = "Vui lòng đăng nhập để thực hiện chức năng đặt lịch khám!"
-login.login_message_category = "info" # Loại thông báo (bootstrap class)
+login.login_message_category = "info"
 
 
 

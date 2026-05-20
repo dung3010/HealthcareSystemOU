@@ -109,6 +109,25 @@
   }
   .btn-nav:hover { background: white; color:#245140;  box-shadow: inset 0 0 0 2px #245140;}
 
+
+.avatar {
+    width: 60px;          /* Bạn có thể tùy chỉnh tăng giảm độ to nhỏ ở đây */
+    height: 60px;
+    border-radius: 50%;   /* Ép khung thành hình tròn tuyệt đối */
+    overflow: hidden;     /* Cắt bỏ phần ảnh bị thừa ra ngoài vòng tròn */
+    flex-shrink: 0;       /* QUAN TRỌNG: Ngăn không cho khung ảnh bị bóp méo khi màn hình thu nhỏ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0; /* Màu nền xám nhẹ nếu hiển thị bằng chữ cái */
+}
+
+/* Định dạng cho ảnh thẻ bên trong */
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* QUAN TRỌNG: Giúp ảnh tự co giãn, không bị bẹt hoặc móp hình */
+}
   /* ---- LAYOUT ---- */
   .wrapper {
     max-width: 1120px;

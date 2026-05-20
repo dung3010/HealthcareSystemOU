@@ -1,24 +1,3 @@
-function cancelApp(btn) {
-    const appId = btn.getAttribute('data-id');
-
-    if(confirm('Bạn có chắc chắn muốn hủy lịch hẹn này không?')) {
-        fetch(`/api/cancel-appointment/${appId}`, {
-            method: 'POST'
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === 'success') {
-                alert(data.message);
-                location.reload(); // Load lại trang để cập nhật trạng thái
-            } else {
-                alert('Lỗi: ' + data.message);
-            }
-        })
-        .catch(err => console.error(err));
-    }
-}
-
-
 const doctorSelect = document.querySelector('select[name="doctor_id"]');
 const dateInput = document.querySelector('input[name="date"]');
 const slotsGrid = document.getElementById('slots-grid');
@@ -87,6 +66,33 @@ function fetchSlots() {
 
 doctorSelect.addEventListener('change', fetchSlots);
 dateInput.addEventListener('change', fetchSlots);
+
+
+function confirmCancel(apptId) {
+    Swal.fire({
+        title: 'Xác nhận hủy lịch?',
+        text: "Bạn có chắc chắn muốn hủy lịch hẹn khám này không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#2D5F4F', // Đổi màu nút khớp với tone màu chung --accent của nhóm
+        cancelButtonColor: '#8B2E2E',  // Màu nút hủy --danger
+        confirmButtonText: 'Đồng ý',
+        cancelButtonText: 'Quay lại',
+        background: '#FFFFFF',
+        customClass: {
+            popup: 'animated fadeInDown'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Nếu bấm OK -> Tạo một form POST chạy ngầm để gửi yêu cầu lên Route Flask
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/dashboard/${apptId}/cancel`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
 
 // Chạy lần đầu khi load trang
 renderDefaultSlots();
