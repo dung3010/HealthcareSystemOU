@@ -62,7 +62,6 @@ def is_user_blocked(user):
 
 
 def record_cancel(user):
-    """Ghi nhận 1 lần huỷ lịch, block 24h nếu >= 3 lần/tuần."""
     now = datetime.now()
     if not user.cancel_week_start or (now - user.cancel_week_start) >= timedelta(days=7):
         user.cancel_week_start = now
@@ -70,7 +69,7 @@ def record_cancel(user):
 
     user.cancel_count_week += 1
 
-    if user.cancel_count_week >= 3:
+    if user.cancel_count_week > 3:
         user.blocked_until = now + timedelta(hours=24)
 
 
@@ -91,7 +90,6 @@ def add_doctor(name, specialty):
 
 
 def is_doctor_on_leave(doctor_id, target_date):
-    """Kiểm tra bác sĩ có nghỉ phép vào ngày đó không."""
     return DoctorSchedule.query.filter_by(
         doctor_id=doctor_id,
         work_date=target_date,
@@ -101,7 +99,6 @@ def is_doctor_on_leave(doctor_id, target_date):
 
 
 def count_doctor_appointments_gon(doctor_id, target_date):
-    """Số lịch khám của bác sĩ trong 1 ngày (không tính Cancelled)."""
     return Appointment.query.filter(
         Appointment.doctor_id == doctor_id,
         Appointment.app_date == target_date,
@@ -132,10 +129,6 @@ def get_appointments_by_user(user_id):
 
 
 def add_appointment(patient_id, doctor_id, appt_date, appt_time):
-    """
-    Tạo lịch khám mới với đầy đủ validate nghiệp vụ.
-    Trả về (appointment, error_message).
-    """
     user = get_user_by_id(patient_id)
     doctor = get_doctor_by_id(doctor_id)
 
@@ -201,10 +194,6 @@ def add_appointment(patient_id, doctor_id, appt_date, appt_time):
 
 
 def cancel_appointment(appt_id, current_user_id, is_admin = False):
-    """
-    Huỷ lịch khám. Chỉ bệnh nhân đặt hoặc admin mới được huỷ.
-    Trả về (True/False, thông báo).
-    """
     appt = get_appointment_by_id(appt_id)
     if not appt:
         return False, 'Không tìm thấy lịch khám.'
