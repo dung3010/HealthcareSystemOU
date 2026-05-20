@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, jsonify,flash
+from flask import render_template, request, redirect, url_for, jsonify,flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from happ import app, login, admin
 from happ.models import User, UserRole
@@ -120,6 +120,14 @@ def register_routes(app):
                 err_msg = "Tên đăng nhập hoặc mật khẩu không chính xác!"
 
         return render_template('layout/login.html', err_msg=err_msg)
+
+    @app.route('/admin')
+    @login_required
+    def admin_dashboard():
+        if current_user.user_role != UserRole.ADMIN:
+            abort(403)  # Ngắt luồng và hiển thị trang lỗi 403
+
+        return render_template('admin.html')
 
     # === THÊM ROUTE ĐĂNG XUẤT Ở ĐÂY ===
     @app.route('/logout')
