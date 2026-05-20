@@ -1,7 +1,7 @@
 from flask_admin import Admin, AdminIndexView, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, logout_user
-from flask import redirect, url_for
+from flask import redirect, url_for, abort
 from happ import app, db
 from happ.models import User, Doctor, Appointment, UserRole, DoctorSchedule
 
@@ -11,14 +11,20 @@ class MyAdminIndexView(AdminIndexView):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('login_view'))
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_view'))
+        else:
+            abort(403)
 
 class AuthenticatedModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('login_view'))
+        if not current_user.is_authenticated:
+            return redirect(url_for('login_view'))
+        else:
+            abort(403)
 
 class LogoutView(BaseView):
     @expose('/')

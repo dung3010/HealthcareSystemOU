@@ -121,13 +121,13 @@ def register_routes(app):
 
         return render_template('layout/login.html', err_msg=err_msg)
 
-    @app.route('/admin')
-    @login_required
-    def admin_dashboard():
-        if current_user.user_role != UserRole.ADMIN:
-            abort(403)  # Ngắt luồng và hiển thị trang lỗi 403
-
-        return render_template('admin.html')
+    # @app.route('/admin')
+    # @login_required
+    # def admin_dashboard():
+    #     if current_user.user_role != UserRole.ADMIN:
+    #         abort(403)  # Ngắt luồng và hiển thị trang lỗi 403
+    #
+    #     return render_template('admin.html')
 
     # === THÊM ROUTE ĐĂNG XUẤT Ở ĐÂY ===
     @app.route('/logout')
