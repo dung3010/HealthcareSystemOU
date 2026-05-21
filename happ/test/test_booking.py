@@ -172,7 +172,7 @@ def test_book_appointment_user_block(test_session, sample_data):
     assert 'Tài khoản bị hạn chế đặt lịch' in err
 
 
-def test_book_appointment_boundary_doctor_max_daily(test_session, sample_data):
+def test_book_appointment_doctor_max(test_session, sample_data):
     doc1 = sample_data['doc1']
     tomorrow = date.today() + timedelta(days=1)
 
