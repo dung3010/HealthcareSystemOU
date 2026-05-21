@@ -98,7 +98,7 @@ def is_doctor_on_leave(doctor_id, target_date):
     ).first() is not None
 
 
-def count_doctor_appointments_gon(doctor_id, target_date):
+def count_doctor_appointments(doctor_id, target_date):
     return Appointment.query.filter(
         Appointment.doctor_id == doctor_id,
         Appointment.app_date == target_date,
@@ -177,7 +177,7 @@ def add_appointment(patient_id, doctor_id, appt_date, appt_time):
         return None, 'Bác sĩ đang nghỉ phép vào ngày này.'
 
     #8. Bác sĩ không vượt 20 lịch/ngày
-    if count_doctor_appointments_gon(doctor_id, appt_date) >= 20:
+    if count_doctor_appointments(doctor_id, appt_date) >= 20:
         return None, 'Bác sĩ đã đầy lịch trong ngày này (tối đa 20 lịch).'
 
 

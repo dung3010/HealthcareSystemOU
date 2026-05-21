@@ -57,8 +57,9 @@ def test_cancel_appointment_block_user(test_session, sample_data):
 
     assert patient1.blocked_until is None
 
-    for i in range(3):
-        appt_time = time(9, i * 20)
+    base = datetime.strptime("09:00", "%H:%M")
+    for i in range(4):
+        appt_time = (base + timedelta(minutes=i * 20)).time()
 
         appt, _ = dao.add_appointment(patient_id=patient1.id, doctor_id=doc1.id, appt_date=tomorrow,
                                       appt_time=appt_time)
